@@ -4,17 +4,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
 import java.util.List;
 
 public class RestaurantsPageTest {
 
-    WebDriver driver;
+    private WebDriver driver;
 
-    @BeforeTest
+    @BeforeMethod(alwaysRun = true)
     public void setupDriverAndBrowserAndSite(){
         driver = new ChromeDriver();
         driver.get("https://dominos.by/restaurants");
@@ -23,9 +21,10 @@ public class RestaurantsPageTest {
         btnCloseAds.click();
     }
 
-    @AfterTest
-    public void quitDriver() {
+    @AfterMethod(alwaysRun = true)
+    public void quitBrowser() {
         driver.quit();
+        driver = null;
     }
 
     @Test
@@ -46,8 +45,8 @@ public class RestaurantsPageTest {
 
         new WebDriverWait(driver, 2).until(d-> checkAvailabilityButton.getText().equals("Адрес в зоне доставки"));
 
-        Assert.assertEquals(checkAvailabilityButton.getText(), "Адрес в зоне доставки");
-        Assert.assertEquals(driver.findElement(By.xpath("//div[@class=\"notification\"]/div[@class=\"notification__title\"]")).getText(), "Вы находитесь в зоне доставки");
+        Assert.assertEquals(checkAvailabilityButton.getText(), "Адрес в зоне доставки", "Button didn't change it's text inside");
+        Assert.assertEquals(driver.findElement(By.xpath("//div[@class=\"notification\"]/div[@class=\"notification__title\"]")).getText(), "Вы находитесь в зоне доставки", "There is notification delivery is NOT available");
 
     }
 }
