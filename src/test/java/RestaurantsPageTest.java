@@ -35,7 +35,7 @@ public class RestaurantsPageTest {
         streetInputDiv.click();
 
         driver.findElement(By.xpath("//input[../div/text()=\"Поиск\"]")).sendKeys("УМАНСКАЯ УЛ.");
-        new WebDriverWait(driver, 5).until(d->driver.findElement(By.xpath("//li/button[./div[1]/text()=\"УМАНСКАЯ УЛ.\" and ./div[2]/text()=\"МИНСК\"]"))).click();
+        new WebDriverWait(driver, 5).until(d->driver.findElement(By.xpath("//li/button[./div/text()=\"УМАНСКАЯ УЛ.\" and ./div/text()=\"МИНСК\"]"))).click();
 
         form.findElement(By.xpath("//input[..//div/text()=\"Номер дома\"]")).sendKeys("37");
 
