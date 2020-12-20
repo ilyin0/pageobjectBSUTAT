@@ -31,14 +31,13 @@ public class RestaurantsPageTest {
     public void testIsAvailableDeliveryAddress() {
         WebElement form = driver.findElement(By.xpath("//form[@class=\"store-locator__form\"]"));
 
-        WebElement streetInputDiv = form.findElement(By.xpath("//div[./div[1]/text()=\"Улица\"]"));
+        WebElement streetInputDiv = form.findElement(By.xpath("//div[./div/text()=\"Улица\"]"));
         streetInputDiv.click();
 
-        driver.findElement(By.xpath("//div[@class=\"search-street__modal-content\"]//input[@class=\"custom-field-text__input\"]")).sendKeys("УМАНСКАЯ УЛ.");
+        driver.findElement(By.xpath("//input[../div/text()=\"Поиск\"]")).sendKeys("УМАНСКАЯ УЛ.");
         new WebDriverWait(driver, 5).until(d->driver.findElement(By.xpath("//li/button[./div[1]/text()=\"УМАНСКАЯ УЛ.\" and ./div[2]/text()=\"МИНСК\"]"))).click();
 
-        WebElement houseNumberInputDiv = form.findElement(By.xpath("//div[./div[1]/text()=\"Номер дома\"]"));
-        houseNumberInputDiv.findElement(By.tagName("input")).sendKeys("37");
+        form.findElement(By.xpath("//input[..//div/text()=\"Номер дома\"]")).sendKeys("37");
 
         WebElement checkAvailabilityButton = driver.findElement(By.xpath("//form[@class=\"store-locator__form\"]/button"));
         checkAvailabilityButton.click();
