@@ -1,51 +1,36 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.*;
-
-import java.util.List;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+import pages.RestaurantsPage;
 
 public class RestaurantsPageTest {
 
-    private WebDriver driver;
+    RestaurantsPage page;
 
-    @BeforeMethod(alwaysRun = true)
+    @BeforeTest
     public void setupDriverAndBrowserAndSite(){
-        driver = new ChromeDriver();
-        driver.get("https://dominos.by/restaurants");
-        driver.manage().window().fullscreen();
-        WebElement btnCloseAds = new WebDriverWait(driver, 5).until(d->driver.findElement(By.className("modal__close")));
-        btnCloseAds.click();
+        page = new RestaurantsPage(new ChromeDriver());
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterTest
     public void quitBrowser() {
-        driver.quit();
-        driver = null;
+        page.closePage();
     }
 
     @Test
     public void testIsAvailableDeliveryAddress() {
-        WebElement form = driver.findElement(By.xpath("//form[@class=\"store-locator__form\"]"));
+        SoftAssert softAssertion = new SoftAssert();
 
-        WebElement streetInputDiv = form.findElement(By.xpath("//div[./div/text()=\"Улица\"]"));
-        streetInputDiv.click();
+        page.openPage().closeAds();
 
-        driver.findElement(By.xpath("//input[../div/text()=\"Поиск\"]")).sendKeys("УМАНСКАЯ УЛ.");
-        new WebDriverWait(driver, 5).until(d->driver.findElement(By.xpath("//li/button[./div/text()=\"УМАНСКАЯ УЛ.\" and ./div/text()=\"МИНСК\"]"))).click();
+        String cityName  = "МИНСК";
+        String streetName = "УМАНСКАЯ УЛ.";
+        int houseNumber = 37;
 
-        form.findElement(By.xpath("//input[..//div/text()=\"Номер дома\"]")).sendKeys("37");
-
-        WebElement checkAvailabilityButton = driver.findElement(By.xpath("//form[@class=\"store-locator__form\"]/button"));
-        checkAvailabilityButton.click();
-
-        new WebDriverWait(driver, 2).until(d-> checkAvailabilityButton.getText().equals("Адрес в зоне доставки"));
-
-        Assert.assertEquals(checkAvailabilityButton.getText(), "Адрес в зоне доставки", "Button didn't change it's text inside");
-        Assert.assertEquals(driver.findElement(By.xpath("//div[@class=\"notification\"]/div[@class=\"notification__title\"]")).getText(), "Вы находитесь в зоне доставки", "There is notification delivery is NOT available");
-
+        softAssertion.assertEquals(page.checkDeliveryAddress(cityName, streetName, houseNumber).getBtnCheckText(), "Адрес в зоне доставки", "Button text has NOT been changed");
+        Assert.assertEquals(page.getDivNotificationTitleText(), "Вы находитесь в зоне доставки", "There is notification delivery is NOT available");
     }
 }
