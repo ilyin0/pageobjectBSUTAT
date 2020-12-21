@@ -20,9 +20,6 @@ public class RestaurantsPage extends AbstractPage {
     @FindBy(className = "store-locator__button")
     private WebElement btnCheck;
 
-    @FindBy(className = "modal__close")
-    private WebElement btnCloseAds;
-
     @FindBy(className = "notification")
     private WebElement divNotification;
 
@@ -46,11 +43,6 @@ public class RestaurantsPage extends AbstractPage {
     public RestaurantsPage openPage() {
         driver.get(RESTAURANTS_PAGE_URL);
         waitJavascriptIsExecuted(WAIT_TIMEOUT_SECONDS);
-        return this;
-    }
-
-    public RestaurantsPage closeAds() {
-        btnCloseAds.click();
         return this;
     }
 
