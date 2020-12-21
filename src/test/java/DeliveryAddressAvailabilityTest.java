@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.RestaurantsPage;
 
-public class RestaurantsPageTest {
+public class DeliveryAddressAvailaibilityTest {
 
     RestaurantsPage page;
 
