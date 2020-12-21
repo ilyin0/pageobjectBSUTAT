@@ -2,6 +2,8 @@ package pages;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -12,15 +14,23 @@ public abstract class AbstractPage {
     protected WebDriver driver;
     protected final int WAIT_TIMEOUT_SECONDS = 10;
 
+    @FindBy(className = "modal__close")
+    private WebElement btnCloseAds;
+
+    protected AbstractPage(WebDriver driver) {
+        this.driver = driver;
+        PageFactory.initElements(driver, this);
+    }
+
     protected abstract AbstractPage openPage();
 
     public void closePage() {
         driver.quit();
     }
 
-    protected AbstractPage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(driver, this);
+    public AbstractPage closeAds() {
+        btnCloseAds.click();
+        return this;
     }
 
     protected boolean isJavascriptExecuted() {
@@ -46,6 +56,11 @@ public abstract class AbstractPage {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    protected AbstractPage clickAndGo(WebElement clickableWebElement) {
+        clickableWebElement.click();
+        return this;
     }
 
 }
